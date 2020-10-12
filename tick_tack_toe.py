@@ -3,20 +3,20 @@ Henry Quillin
 Tick Tack Toe Board
 10/1/2020
 '''
+import sys
 # / Welcome message
 # / Draw Board
 # / Choose number of players (0 - 2)
 # Use .random to pick who goes first
 # / Place first entry on the board
 # / Gameplay
-    # insert an x or O into an array
-    # my_board_array[4] = O
-# Check for winner/tie condition
-# Win/lose message (with ASCII art)
+# / Check for winner/tie condition
+# / Win/lose message (with ASCII art)
 # Ask user to play again
 
 #variables
-check_for_x = ["X", "X", "X"]
+didiwin = False
+winning_position_msg = ' '
 board = [
     [" ", " ", " "],
     [" ", " ", " "],
@@ -34,26 +34,62 @@ def printboard():
     2 | {board[2][0]}|{board[2][1]}|{board[2][2]} | 
        -------
     ''')
-def p1turn():
+
+
+def p1turn(): # Function for player 1's turn
     p1_row = int(input('Player 1 please enter your row '))
     p1_col = int(input('Player 1 please enter your column '))
     board[p1_row][p1_col] = p1_x_or_o
     printboard()
     win_check()
-def p2turn():
+
+
+def p2turn(): # Function for player 1's turn
     p2_row = int(input('Player 2 please enter your row '))
     p2_col = int(input('Player 2 please enter your column '))
     board[p2_row][p2_col] = p2_x_or_o
     printboard()
     win_check()
-didiwin = False
-def win_check():
-    if board[0][0] == board [0][1] and board[0][0] == board[0][2]:
-        didiwin = False
-        print(f"{board[0][0]}'s are the winner!")
 
 
-print('Welcome to Tic-Tac- Toe') #welcome message
+def win_check(): # Function to check winning condition
+    # row 0, row 1, row 2, col 0, col 1, col 2, across left, across right
+    global didiwin
+    global winning_position_msg
+    if board[0][0] == board[0][1] and board[0][0] == board[0][2] and board[0][0] != ' ':
+        didiwin = True
+        winning_position_msg = 'row 0'
+    if board[1][0] == board[1][1] and board[1][0] == board[1][2] and board[1][0] != ' ':
+        didiwin = True
+        winning_position_msg = 'row 1'
+    if board[2][0] == board[2][1] and board[2][0] == board[2][2] and board[2][0] != ' ':
+        didiwin = True
+        winning_position_msg = 'row 2'
+    if board[0][0] == board[1][0] and board[0][0] == board[2][0] and board[0][0] != ' ':
+        didiwin = True
+        winning_position_msg = 'col 0'
+    if board[0][1] == board[1][1] and board[0][1] == board[2][1] and board[0][1] != ' ':
+        didiwin = True
+        winning_position_msg = 'col 1'
+    if board[0][2] == board[1][2] and board[0][2] == board[2][2] and board[0][2] != ' ':
+        didiwin = True
+        winning_position_msg = 'col 2'
+    if board[0][0] == board[1][1] and board[0][0] == board[2][2] and board[2][2] != ' ':
+        didiwin = True
+        winning_position_msg = 'a diagonal from 0,0 to 2,2'
+    if board[0][2] == board[1][1] and board[0][2] == board[0][2] and board[0][2] != ' ':
+        didiwin = True
+        winning_position_msg = 'a diagonal from 0,2 to 0,2'
+
+
+def clear_board(): # Clears board
+    global board
+    board = [
+        [" ", " ", " "],
+        [" ", " ", " "],
+        [" ", " ", " "]
+    ]
+print('Welcome to Tic-Tac- Toe') # welcome message
 # num_of_players = input('Choose number of players (0, 1 or 2): ') # Input for # of players
 # print(f'You have chosen to play with {num_of_players} players')
 
@@ -67,18 +103,28 @@ else:
     p2_x_or_o = 'X'
     print("Player 1 is O's and player 2 is X's")
 printboard()
-while didiwin == False:
+
+while didiwin == False:  # Gameplay loop
     p1turn()
-    if didiwin == False:
+    win_check()
+    if didiwin == True:
+        print(f"Player 1 won with {winning_position_msg}!")
+        print('♪┏(・o･)┛♪┗ ( ･o･) ┓♪')
         break
     p2turn()
+    win_check()
+    if didiwin == True:
+        print(f"Player 2 won with {winning_position_msg}!")
+        print('♪┏(・o･)┛♪┗ ( ･o･) ┓♪')
+        break
+
 
 
 '''
 Gameplay loop: 
 - While didiwin is false: 
     - p1 turn 
-    - p2 turn 
+    - p2 turn  
 - Else: 
     - (winning player) has won! 
     - Would you like to play again? 
