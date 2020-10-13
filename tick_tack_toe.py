@@ -12,15 +12,17 @@ import sys
 # / Gameplay
 # / Check for winner/tie condition
 # / Win/lose message (with ASCII art)
+# make tie condition
+#
 # Ask user to play again
 
 #variables
 didiwin = False
 winning_position_msg = ' '
 board = [
-    [" ", " ", " "],
-    [" ", " ", " "],
-    [" ", " ", " "]
+    ["X", "O", "X"],
+    ["X", "O", "X"],
+    ["O", "X", "O"]
 ]
 #functions
 def printboard():
@@ -80,6 +82,17 @@ def win_check(): # Function to check winning condition
     if board[0][2] == board[1][1] and board[0][2] == board[0][2] and board[0][2] != ' ':
         didiwin = True
         winning_position_msg = 'a diagonal from 0,2 to 0,2'
+    count = 0
+    for i in range(3): # Check if there is a tie
+        for y in range(3):
+            print(f'{i} {y}')
+            if board[i][y] != ' ':
+                count += 1
+                y += 1
+    if count == 9:
+        didiwin == True
+        print('Its a tie!')
+
 
 
 def clear_board(): # Clears board
@@ -117,7 +130,6 @@ while didiwin == False:  # Gameplay loop
         print(f"Player 2 won with {winning_position_msg}!")
         print('♪┏(・o･)┛♪┗ ( ･o･) ┓♪')
         break
-
 
 
 '''
