@@ -4,6 +4,7 @@ Tick Tack Toe Board
 10/1/2020
 '''
 import sys
+
 # / Welcome message
 # / Draw Board
 # / Choose number of players (0 - 2)
@@ -16,15 +17,19 @@ import sys
 #
 # Ask user to play again
 
-#variables
+# variables
 didiwin = False
 winning_position_msg = ' '
 board = [
-    ["X", "O", "X"],
-    ["X", "O", "X"],
-    ["O", "X", "O"]
+    [" ", " ", " "],
+    [" ", " ", " "],
+    [" ", " ", " "]
 ]
-#functions
+p1_x_or_o = ' '
+p2_x_or_o = ' '
+
+
+# functions
 def printboard():
     print(f'''
         0 1 2
@@ -38,23 +43,46 @@ def printboard():
     ''')
 
 
-def p1turn(): # Function for player 1's turn
+def choose_x_or_o():
+    global p1_x_or_o
+    global p2_x_or_o
+    x_or_o = input("Player 1, chose X's or O's: ").upper()  # Input for X or O's
+    if x_or_o == 'X':
+        p1_x_or_o = 'X'
+        p2_x_or_o = 'O'
+        print("Player 1 is X's and player 2 is O's")
+    else:
+        p1_x_or_o = 'O'
+        p2_x_or_o = 'X'
+        print("Player 1 is O's and player 2 is X's")
+
+    printboard()
+
+
+def p1turn():  # Function for player 1's turn
     p1_row = int(input('Player 1 please enter your row '))
     p1_col = int(input('Player 1 please enter your column '))
+
+    if board[p1_row][p1_col] == 'X' or board[p1_row][p1_col] == 'O':
+        print('Oops! This spot has already been taken')
+        p1turn()
     board[p1_row][p1_col] = p1_x_or_o
     printboard()
     win_check()
 
 
-def p2turn(): # Function for player 1's turn
+def p2turn():  # Function for player 1's turn
     p2_row = int(input('Player 2 please enter your row '))
     p2_col = int(input('Player 2 please enter your column '))
+    if board[p2_row][p2_col] == 'X' or board[p2_row][p2_col] == 'O':
+        print('Oops! This spot has already been taken')
+        p2turn()
     board[p2_row][p2_col] = p2_x_or_o
     printboard()
     win_check()
 
 
-def win_check(): # Function to check winning condition
+def win_check():  # Function to check winning condition
     # row 0, row 1, row 2, col 0, col 1, col 2, across left, across right
     global didiwin
     global winning_position_msg
@@ -83,9 +111,8 @@ def win_check(): # Function to check winning condition
         didiwin = True
         winning_position_msg = 'a diagonal from 0,2 to 0,2'
     count = 0
-    for i in range(3): # Check if there is a tie
+    for i in range(3):  # Check if there is a tie
         for y in range(3):
-            print(f'{i} {y}')
             if board[i][y] != ' ':
                 count += 1
                 y += 1
@@ -94,28 +121,21 @@ def win_check(): # Function to check winning condition
         print('Its a tie!')
 
 
-
-def clear_board(): # Clears board
+def clear_board():  # Clears board
     global board
     board = [
         [" ", " ", " "],
         [" ", " ", " "],
         [" ", " ", " "]
     ]
-print('Welcome to Tic-Tac- Toe') # welcome message
+
+
+print('Welcome to Tic-Tac- Toe')  # welcome message
 # num_of_players = input('Choose number of players (0, 1 or 2): ') # Input for # of players
 # print(f'You have chosen to play with {num_of_players} players')
 
-x_or_o = input("Player 1, chose X's or O's: ").upper() # Input for X or O's
-if x_or_o == 'X':
-    p1_x_or_o = 'X'
-    p2_x_or_o = 'O'
-    print("Player 1 is X's and player 2 is O's")
-else:
-    p1_x_or_o = 'O'
-    p2_x_or_o = 'X'
-    print("Player 1 is O's and player 2 is X's")
-printboard()
+
+choose_x_or_o()
 
 while didiwin == False:  # Gameplay loop
     p1turn()
@@ -123,14 +143,27 @@ while didiwin == False:  # Gameplay loop
     if didiwin == True:
         print(f"Player 1 won with {winning_position_msg}!")
         print('♪┏(・o･)┛♪┗ ( ･o･) ┓♪')
-        break
+        playagain = input('Would you like to play again?(y/n)')
+        if playagain == 'y':
+            didiwin == False
+            clear_board()
+            choose_x_or_o()
+        else:
+            print('Goodbye')
+            break
     p2turn()
     win_check()
     if didiwin == True:
         print(f"Player 2 won with {winning_position_msg}!")
         print('♪┏(・o･)┛♪┗ ( ･o･) ┓♪')
-        break
-
+        playagain = input('Would you like to play again?(y/n)')
+        if playagain == 'y':
+            didiwin == False
+            clear_board()
+            choose_x_or_o()
+        else:
+            print('Goodbye')
+            break
 
 '''
 Gameplay loop: 
